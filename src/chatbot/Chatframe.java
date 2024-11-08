@@ -29,6 +29,8 @@ public class Chatframe extends javax.swing.JFrame {
         setDefaultCloseOperation(Chatframe.EXIT_ON_CLOSE); 
         setLocationRelativeTo(null); 
         
+        System.out.println("Prueba de cambio");
+        
         jTextArea1.setLineWrap(true);
     }
 
