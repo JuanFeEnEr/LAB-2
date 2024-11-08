@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -88,6 +89,11 @@ public class Chatframe extends javax.swing.JFrame {
         });
 
         botonLimpiar.setText("Limpiar Chat");
+        botonLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonLimpiarMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,28 +147,41 @@ public class Chatframe extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String user = Input.getText();
-        if (!user.trim().isEmpty()){
-            jTextArea1.append("User: " + user + "\n");
-            Input.setText(" ");
-            
-            try {
-                String response = callOllama(user);
-                jTextArea1.append("Bot: " + response + "\n");
-            } catch (IOException e) {
-                jTextArea1.append("Error al conectarse con la API de Ollama.\n");
-            }
-        }
+        enviarPregunta();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void InputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InputActionPerformed
-        // TODO add your handling code here:
+        enviarPregunta();
     }//GEN-LAST:event_InputActionPerformed
 
     private void botonhistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonhistorialMouseClicked
         mostrarVentanaHistorial();
     }//GEN-LAST:event_botonhistorialMouseClicked
+
+    private void botonLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLimpiarMouseClicked
+        if (!conversacionActual.isEmpty()) {
+            historialConversaciones.add(conversacionActual);
+            conversacionActual = new ArrayList<>(); // Inicia una nueva conversación
+        }
+        jTextArea1.setText("");
+    }//GEN-LAST:event_botonLimpiarMouseClicked
+    private void enviarPregunta() {
+        String user = Input.getText();
+        if (!user.trim().isEmpty()) {
+            String mensajeUsuario = "User: " + user + "\n";
+            jTextArea1.append(mensajeUsuario);
+            Input.setText("");
+
+            try {
+                String response = callOllama(user);
+                String mensajeBot = "Bot: " + response;
+                jTextArea1.append(mensajeBot + "\n");
+                conversacionActual.add(mensajeUsuario + mensajeBot);
+            } catch (IOException e) {
+                manejarError("Error al conectarse con la API de Ollama.");
+            }
+        }
+    }
     private void mostrarVentanaHistorial(){
         JFrame ventanaHistorial = new JFrame("Historial de Conversación");
         ventanaHistorial.setSize(400, 400);
@@ -206,6 +225,10 @@ public class Chatframe extends javax.swing.JFrame {
             }
             return response.toString();
         }
+    }
+    private void manejarError(String mensajeError) {
+        jTextArea1.append("Error: " + mensajeError + "\n");
+        JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
 private String processJsonResponse(String json) {
