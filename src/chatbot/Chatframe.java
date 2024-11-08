@@ -10,13 +10,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author USER
  */
 public class Chatframe extends javax.swing.JFrame {
-
+    private final ArrayList<ArrayList<String>> historialConversaciones = new ArrayList<>();
+    private ArrayList<String> conversacionActual = new ArrayList<>();
     /**
      * Creates new form Chatframe
      */
@@ -49,6 +54,8 @@ public class Chatframe extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollBar1 = new javax.swing.JScrollBar();
         label1 = new java.awt.Label();
+        botonhistorial = new javax.swing.JButton();
+        botonLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,17 +80,30 @@ public class Chatframe extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         label1.setText("CHAT BOT OLLAMA");
 
+        botonhistorial.setText("HISTORIAL");
+        botonhistorial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonhistorialMouseClicked(evt);
+            }
+        });
+
+        botonLimpiar.setText("Limpiar Chat");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botonLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(botonhistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -102,11 +122,19 @@ public class Chatframe extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(74, 74, 74))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(74, 74, 74))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botonhistorial)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonLimpiar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -132,6 +160,30 @@ public class Chatframe extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_InputActionPerformed
 
+    private void botonhistorialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonhistorialMouseClicked
+        mostrarVentanaHistorial();
+    }//GEN-LAST:event_botonhistorialMouseClicked
+    private void mostrarVentanaHistorial(){
+        JFrame ventanaHistorial = new JFrame("Historial de Conversación");
+        ventanaHistorial.setSize(400, 400);
+        ventanaHistorial.setLocationRelativeTo(this);
+
+        JTextArea areaHistorial = new JTextArea();
+        areaHistorial.setEditable(false);
+        
+        for (int i = 0; i < historialConversaciones.size(); i++) {
+            areaHistorial.append("Conversación " + (i + 1) + ":\n");
+            for (String mensaje : historialConversaciones.get(i)) {
+                areaHistorial.append(mensaje);
+            }
+            areaHistorial.append("\n---\n"); // Separador entre conversaciones
+        }
+
+        JScrollPane scrollPane = new JScrollPane(areaHistorial);
+        ventanaHistorial.add(scrollPane);
+        ventanaHistorial.setVisible(true);
+    
+    }
     private String callOllama(String prompt) throws IOException{
         URL url = new URL("http://localhost:11434/api/generate");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -207,6 +259,8 @@ private String processJsonResponse(String json) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Input;
+    private javax.swing.JButton botonLimpiar;
+    private javax.swing.JButton botonhistorial;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane1;
