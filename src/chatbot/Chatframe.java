@@ -4,6 +4,8 @@
  */
 package chatbot;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,10 +36,25 @@ public class Chatframe extends javax.swing.JFrame {
         setSize(700, 700);
         setDefaultCloseOperation(Chatframe.EXIT_ON_CLOSE); 
         setLocationRelativeTo(null); 
-        
-        System.out.println("Prueba de cambio");
-        
+        getContentPane().setBackground(new Color(204, 204, 255));
+        jTextArea1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
+        jTextArea1.setEditable(false);
+        Input.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        Input.setBounds(20, 540, 400, 40);
+        jButton1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        jButton1.setBackground(new Color(100, 149, 237));
+        jButton1.setForeground(Color.WHITE);
+        jButton1.setBounds(440, 540, 100, 40);
+        botonhistorial.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botonhistorial.setBackground(new Color(60, 179, 113));
+        botonhistorial.setForeground(Color.WHITE);
+        botonhistorial.setBounds(550, 540, 100, 40);
+        botonLimpiar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        botonLimpiar.setBackground(new Color(220, 20, 60));
+        botonLimpiar.setForeground(Color.WHITE);
+        botonLimpiar.setBounds(550, 590, 100, 40);
     }
 
     /**
@@ -188,12 +205,18 @@ public class Chatframe extends javax.swing.JFrame {
         ventanaHistorial.setLocationRelativeTo(this);
 
         JTextArea areaHistorial = new JTextArea();
+        areaHistorial.setLineWrap(true);
+        areaHistorial.setWrapStyleWord(true);
         areaHistorial.setEditable(false);
-        
+
         for (int i = 0; i < historialConversaciones.size(); i++) {
             areaHistorial.append("Conversación " + (i + 1) + ":\n");
             for (String mensaje : historialConversaciones.get(i)) {
-                areaHistorial.append(mensaje);
+                if (mensaje.startsWith("User:")) {
+                    areaHistorial.append("Usuario: " + mensaje.replace("User: ", "") + "\n");
+                } else if (mensaje.startsWith("Bot:")) {
+                    areaHistorial.append("Chatbot: " + mensaje.replace("Bot: ", "") + "\n");
+                }
             }
             areaHistorial.append("\n---\n"); // Separador entre conversaciones
         }
