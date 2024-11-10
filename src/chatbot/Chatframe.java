@@ -205,7 +205,7 @@ public class Chatframe extends javax.swing.JFrame {
     private void enviarPregunta() {
         String user = Input.getText();
         if (!user.trim().isEmpty()) {
-            String mensajeUsuario = "\n USER : " + user + "\n";
+            String mensajeUsuario = "USER : " + user + "\n";
             jTextArea1.append(mensajeUsuario);
             Input.setText("");
 
@@ -232,10 +232,10 @@ public class Chatframe extends javax.swing.JFrame {
         for (int i = 0; i < historialConversaciones.size(); i++) {
             areaHistorial.append("Conversación " + (i + 1) + ":\n");
             for (String mensaje : historialConversaciones.get(i)) {
-                if (mensaje.startsWith("User:")) {
-                    areaHistorial.append("Usuario: " + mensaje.replace("User: ", "") + "\n");
-                } else if (mensaje.startsWith("Bot:")) {
-                    areaHistorial.append("Chatbot: " + mensaje.replace("Bot: ", "") + "\n");
+                if (mensaje.startsWith("USER :")) {
+                    areaHistorial.append("Usuario: " + mensaje.replace("USER :", "") + "\n");
+                } else if (mensaje.startsWith("BOT :")) {
+                    areaHistorial.append("Chatbot: " + mensaje.replace("BOT :", "") + "\n");
                 }
             }
             areaHistorial.append("\n---\n"); // Separador entre conversaciones
@@ -246,6 +246,7 @@ public class Chatframe extends javax.swing.JFrame {
         ventanaHistorial.setVisible(true);
     
     }
+    
     private String callOllama(String prompt) throws IOException{
         URL url = new URL("http://localhost:11434/api/generate");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
