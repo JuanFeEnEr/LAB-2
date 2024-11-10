@@ -16,7 +16,7 @@ public class Chatbot {
     public static void main(String[] args) {
         Chatframe frame = new Chatframe();
         frame.setVisible(true);
-        frame.setSize(600,600);
+        frame.setSize(800,600);
         
     }
     

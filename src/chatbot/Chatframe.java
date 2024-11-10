@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -30,6 +31,7 @@ public class Chatframe extends javax.swing.JFrame {
      */
     
     public Chatframe() {
+        setIconImage(new ImageIcon(getClass().getResource("llama.png")).getImage());
         initComponents();
         
         setTitle("Chatbot - Ollama API");
@@ -44,11 +46,11 @@ public class Chatframe extends javax.swing.JFrame {
         Input.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         Input.setBounds(20, 540, 400, 40);
         jButton1.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        jButton1.setBackground(new Color(100, 149, 237));
+        jButton1.setBackground(new Color(60, 179, 113));
         jButton1.setForeground(Color.WHITE);
         jButton1.setBounds(440, 540, 100, 40);
         botonhistorial.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        botonhistorial.setBackground(new Color(60, 179, 113));
+        botonhistorial.setBackground(new Color(100, 149, 237));
         botonhistorial.setForeground(Color.WHITE);
         botonhistorial.setBounds(550, 540, 100, 40);
         botonLimpiar.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -76,6 +78,7 @@ public class Chatframe extends javax.swing.JFrame {
         botonLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 204, 204));
 
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -88,27 +91,41 @@ public class Chatframe extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Enviar");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/chatbot/Send.png"))); // NOI18N
+        jButton1.setText("ENVIAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        label1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        label1.setBackground(new java.awt.Color(204, 204, 255));
+        label1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         label1.setText("CHAT BOT OLLAMA");
 
+        botonhistorial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/chatbot/Historial.png"))); // NOI18N
         botonhistorial.setText("HISTORIAL");
         botonhistorial.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonhistorialMouseClicked(evt);
             }
         });
+        botonhistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonhistorialActionPerformed(evt);
+            }
+        });
 
+        botonLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/chatbot/broom.png"))); // NOI18N
         botonLimpiar.setText("Limpiar Chat");
         botonLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 botonLimpiarMouseClicked(evt);
+            }
+        });
+        botonLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonLimpiarActionPerformed(evt);
             }
         });
 
@@ -118,46 +135,41 @@ public class Chatframe extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botonLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(botonhistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                        .addComponent(botonhistorial, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botonLimpiar)))
+                .addGap(14, 14, 14))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86))
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(175, 175, 175))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(74, 74, 74))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(botonhistorial)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botonLimpiar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonhistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -182,16 +194,24 @@ public class Chatframe extends javax.swing.JFrame {
         }
         jTextArea1.setText("");
     }//GEN-LAST:event_botonLimpiarMouseClicked
+
+    private void botonhistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonhistorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonhistorialActionPerformed
+
+    private void botonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLimpiarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonLimpiarActionPerformed
     private void enviarPregunta() {
         String user = Input.getText();
         if (!user.trim().isEmpty()) {
-            String mensajeUsuario = "User: " + user + "\n";
+            String mensajeUsuario = "\n USER : " + user + "\n";
             jTextArea1.append(mensajeUsuario);
             Input.setText("");
 
             try {
                 String response = callOllama(user);
-                String mensajeBot = "Bot: " + response;
+                String mensajeBot = "BOT : " + response;
                 jTextArea1.append(mensajeBot + "\n");
                 conversacionActual.add(mensajeUsuario + mensajeBot);
             } catch (IOException e) {
